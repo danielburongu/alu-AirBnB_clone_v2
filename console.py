@@ -17,28 +17,15 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    '''
-        Contains the entry point of the command interpreter.
-    '''
     prompt = "(hbnb) "
 
     def do_quit(self, args):
-        '''
-            Quit command to exit the program.
-        '''
         return True
 
     def do_EOF(self, args):
-        '''
-            Exits after receiving the EOF signal.
-        '''
         return True
 
     def do_create(self, args):
-        '''
-            Create a new instance of class BaseModel and saves it
-            to the JSON file.
-        '''
         if len(args) == 0:
             print("** class name missing **")
             return
@@ -47,28 +34,23 @@ class HBNBCommand(cmd.Cmd):
             new_instance = eval(args[0])()
             for i in args[1:]:
                 try:
-                    key = i.split("=")[0]
-                    value = i.split("=")[1]
+                    key, value = i.split("=")
                     if hasattr(new_instance, key):
                         value = value.replace("_", " ")
                         try:
                             value = eval(value)
-                        except:
+                        except Exception:
                             pass
                         setattr(new_instance, key, value)
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     pass
             new_instance.save()
             print(new_instance.id)
-        except:
+        except NameError:
             print("** class doesn't exist **")
             return
 
     def do_show(self, args):
-        '''
-            Print the string representation of an instance base on
-            the class name and id given as args.
-        '''
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -90,9 +72,6 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, args):
-        '''
-            Deletes an instance based on the class name and id.
-        '''
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -104,3 +83,45 @@ class HBNBCommand(cmd.Cmd):
         class_id = args[1]
         storage.reload()
         obj_dict = storage.all()
+        try:
+            eval(class_name)
+        except NameError:
+            print("** class doesn't exist **")
+            return
+        key = class_name + "." + class_id
+        try:
+            del obj_dict[key]
+        except KeyError:
+            print("** no instance found **")
+        storage.save()
+
+    def do_all(self, args):
+        args = args.split(" ")
+        obj_list = []
+        objects = storage.all(args[0])
+        try:
+            if args[0] != "":
+                models.classes[args[0]]
+        except (KeyError, NameError):
+            print("** class doesn't exist **")
+            return
+        try:
+            for key, val in objects.items():
+                obj_list.append(val)
+        except Exception:
+            pass
+        print(obj_list)
+
+    def do_update(self, args):
+        storage.reload()
+        args = shlex.split(args)
+        if len(args) == 0:
+            print("** class name missing **")
+            return
+        elif len(args) == 1:
+            print("** instance id missing **")
+            return
+        elif len(args) == 2:
+            print("** attribute name missing **")
+            return
+        elif len(args) ==
