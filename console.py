@@ -17,12 +17,15 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
+    print("Initializing HBNBCommand")  # Added print statement
     prompt = "(hbnb) "
 
     def do_quit(self, args):
+        print("Exiting HBNBCommand")  # Added print statement
         return True
 
     def do_EOF(self, args):
+        print("Exiting HBNBCommand")  # Added print statement
         return True
 
     def do_create(self, args):
