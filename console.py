@@ -31,6 +31,7 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             args = shlex.split(args)
+            print(f"args: {args}") # Added print statement to print the arguments
             new_instance = eval(args[0])()
             for i in args[1:]:
                 try:
@@ -45,6 +46,7 @@ class HBNBCommand(cmd.Cmd):
                 except (ValueError, IndexError) as e:
                     pass
             new_instance.save()
+            print(f"new_instance: {new_instance}") # Added print statement to print the new instance
             print(new_instance.id)
         except NameError:
             print("** class doesn't exist **")
