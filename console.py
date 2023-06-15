@@ -126,25 +126,22 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 0:
             print("** class name missing **")
             return
-        if len(args) == 1:
+        elif len(args) == 1:
             print("** instance id missing **")
             return
-        if len(args) == 2:
+        elif len(args) == 2:
             print("** attribute name missing **")
             return
-        if len(args) == 3:
+        elif len(args) == 3:
             print("** value missing **")
             return
-        obj_dict = storage.all(args[0])
-        key = args[0] + '.' + args[1]
-        if key not in obj_dict:
-            print("** no instance found **")
-            return
-        obj = obj_dict[key]
-        try:
-            attr_type = type(getattr(obj, args[2]))
-            value = attr_type(args[3])
-        except Exception:
-            value = args[3]
-        setattr(obj, args[2], value)
-        obj.save()
+        else:
+            class_name = args[0]
+            if class_name not in models.classes:
+                print("** class doesn't exist **")
+                return
+            # Rest of the code for updating the object
+
+
+if __name__ == '__main__':
+    HBNBCommand().cmdloop()
