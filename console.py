@@ -17,15 +17,12 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    print("Initializing HBNBCommand")  # Added print statement
     prompt = "(hbnb) "
 
     def do_quit(self, args):
-        print("Exiting HBNBCommand")  # Added print statement
         return True
 
     def do_EOF(self, args):
-        print("Exiting HBNBCommand")  # Added print statement
         return True
 
     def do_create(self, args):
@@ -34,7 +31,6 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             args = shlex.split(args)
-            print(f"args: {args}") # Added print statement to print the arguments
             new_instance = eval(args[0])()
             for i in args[1:]:
                 try:
@@ -49,7 +45,6 @@ class HBNBCommand(cmd.Cmd):
                 except (ValueError, IndexError) as e:
                     pass
             new_instance.save()
-            print(f"new_instance: {new_instance}") # Added print statement to print the new instance
             print(new_instance.id)
         except NameError:
             print("** class doesn't exist **")
