@@ -121,10 +121,11 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             for key, val in objects.items():
-                obj_list.append(val)
+                obj_list.append(str(val))
         except Exception:
             pass
         print(obj_list)
+
 
     def do_update(self, args):
         args = shlex.split(args)
