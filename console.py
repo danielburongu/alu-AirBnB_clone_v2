@@ -17,19 +17,15 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    print("Initializing HBNBCommand")  # Added print statement
     prompt = "(hbnb) "
 
     def do_quit(self, args):
-        print("Exiting HBNBCommand")  # Added print statement
         return True
 
     def do_EOF(self, args):
-        print("Exiting HBNBCommand")  # Added print statement
         return True
 
     def do_create(self, args):
-        print("Entering do_create")  # Added print statement
         if len(args) == 0:
             print("** class name missing **")
             print("Exiting do_create")  # Added print statement
@@ -40,25 +36,25 @@ class HBNBCommand(cmd.Cmd):
             new_instance = eval(args[0])()
             for i in args[1:]:
                 try:
-                    key, value = i.split("=")
-                    if hasattr(new_instance, key):
+                    key = i.split("=")[0]
+                    value = i.split("=")[1]
+                    if hasattr(new_instance, key) is True:
                         value = value.replace("_", " ")
                         try:
                             value = eval(value)
-                        except Exception:
+                        except:
                             pass
                         setattr(new_instance, key, value)
-                except (ValueError, IndexError) as e:
+                except (ValueError, IndexError):
                     pass
             new_instance.save()
             print(f"new_instance: {new_instance}") # Added print statement to print the new instance
             print(new_instance.id)
-        except NameError:
+        except:
             print("** class doesn't exist **")
             return
 
     def do_show(self, args):
-        print("Entering do_show")  # Added print statement
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -81,6 +77,9 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, args):
+        '''
+            Deletes an instance based on the class name and id.
+        '''
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -105,6 +104,10 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_all(self, args):
+        '''
+            Prints all string representation of all instances
+            based or not on the class name.
+        '''
         args = args.split(" ")
         obj_list = []
         objects = storage.all(args[0])
@@ -117,11 +120,12 @@ class HBNBCommand(cmd.Cmd):
         try:
             for key, val in objects.items():
                 obj_list.append(val)
-        except Exception:
+        except:
             pass
         print(obj_list)
 
     def do_update(self, args):
+        storage.reload()
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -133,15 +137,4 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
             return
         elif len(args) == 3:
-            print("** value missing **")
-            return
-        else:
-            class_name = args[0]
-            if class_name not in models.classes:
-                print("** class doesn't exist **")
-                return
-            # Rest of the code for updating the object
-
-
-if __name__ == '__main__':
-    HBNBCommand().cmdloop()
+            print("** attribute value missing **")

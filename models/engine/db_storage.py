@@ -4,7 +4,7 @@
 '''
 from os import getenv
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import session, scoped_session
 import models
 from models.state import State
 from models.city import City
@@ -79,7 +79,7 @@ class DBStorage:
             Commit all changes of current database session
         '''
         self.__session = Base.metadata.create_all(self.__engine)
-        factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        factory = session(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(factory)
         self.__session = Session()
 

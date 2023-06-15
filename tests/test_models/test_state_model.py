@@ -6,6 +6,7 @@ import unittest
 from models.base_model import BaseModel
 from models.state import State
 from os import getenv, remove
+import pep8
 
 storage = getenv("HBNB_TYPE_STORAGE", "fs")
 
@@ -34,7 +35,7 @@ class TestState(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    def test_States_db_table(self):
+    def test_States_dbtable(self):
         '''
             Check if the tablename is correct
         '''

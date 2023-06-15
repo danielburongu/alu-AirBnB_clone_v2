@@ -45,7 +45,7 @@ class TestUser(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    def test_Place_db_table(self):
+    def test_Place_dbtable(self):
         '''
             Check if the tablename is correct
         '''
