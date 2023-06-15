@@ -14,6 +14,7 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models.place_amenity import PlaceAmenity
 
 
 class HBNBCommand(cmd.Cmd):
@@ -37,7 +38,11 @@ class HBNBCommand(cmd.Cmd):
         try:
             args = shlex.split(args)
             print(f"args: {args}") # Added print statement to print the arguments
-            new_instance = eval(args[0])()
+            class_name = args[0]
+            if class_name not in models.classes:
+                print("** class doesn't exist **")
+                return
+            new_instance = models.classes[class_name]()
             for i in args[1:]:
                 try:
                     key, value = i.split("=")
