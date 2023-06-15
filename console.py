@@ -38,21 +38,19 @@ class HBNBCommand(cmd.Cmd):
         try:
             args = shlex.split(args)
             print(f"args: {args}") # Added print statement to print the arguments
-            class_name = args[0]
-            if class_name not in models.classes:
+            if args[0] not in models.classes:
                 print("** class doesn't exist **")
                 return
-            new_instance = models.classes[class_name]()
+            new_instance = models.classes[args[0]]()
             for i in args[1:]:
                 try:
                     key, value = i.split("=")
-                    if hasattr(new_instance, key):
-                        value = value.replace("_", " ")
-                        try:
-                            value = eval(value)
-                        except Exception:
-                            pass
-                        setattr(new_instance, key, value)
+                    value = value.replace("_", " ")
+                    try:
+                        value = eval(value)
+                    except Exception:
+                        pass
+                    setattr(new_instance, key, value)
                 except (ValueError, IndexError) as e:
                     pass
             new_instance.save()
@@ -61,6 +59,7 @@ class HBNBCommand(cmd.Cmd):
         except NameError:
             print("** class doesn't exist **")
             return
+
 
     def do_show(self, args):
         print("Entering do_show")  # Added print statement
