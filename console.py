@@ -14,7 +14,6 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
-from models.place_amenity import PlaceAmenity
 
 
 class HBNBCommand(cmd.Cmd):
@@ -38,19 +37,17 @@ class HBNBCommand(cmd.Cmd):
         try:
             args = shlex.split(args)
             print(f"args: {args}") # Added print statement to print the arguments
-            if args[0] not in models.classes:
-                print("** class doesn't exist **")
-                return
-            new_instance = models.classes[args[0]]()
+            new_instance = eval(args[0])()
             for i in args[1:]:
                 try:
                     key, value = i.split("=")
-                    value = value.replace("_", " ")
-                    try:
-                        value = eval(value)
-                    except Exception:
-                        pass
-                    setattr(new_instance, key, value)
+                    if hasattr(new_instance, key):
+                        value = value.replace("_", " ")
+                        try:
+                            value = eval(value)
+                        except Exception:
+                            pass
+                        setattr(new_instance, key, value)
                 except (ValueError, IndexError) as e:
                     pass
             new_instance.save()
@@ -59,7 +56,6 @@ class HBNBCommand(cmd.Cmd):
         except NameError:
             print("** class doesn't exist **")
             return
-
 
     def do_show(self, args):
         print("Entering do_show")  # Added print statement
@@ -120,11 +116,10 @@ class HBNBCommand(cmd.Cmd):
             return
         try:
             for key, val in objects.items():
-                obj_list.append(str(val))
+                obj_list.append(val)
         except Exception:
             pass
         print(obj_list)
-
 
     def do_update(self, args):
         args = shlex.split(args)
