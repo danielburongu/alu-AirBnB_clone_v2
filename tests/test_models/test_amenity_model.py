@@ -45,7 +45,7 @@ class TestAmenity(unittest.TestCase):
         p = style.check_files(['models/amenity.py'])
         self.assertEqual(p.total_errors, 0, "pep8 error needs fixing")
 
-    def test_States_dbtable(self):
+    def test_States_db_table(self):
         '''
             Check if the tablename is correct
         '''

@@ -17,28 +17,15 @@ from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
-    '''
-        Contains the entry point of the command interpreter.
-    '''
-    prompt = ("(hbnb) ")
+    prompt = "(hbnb) "
 
     def do_quit(self, args):
-        '''
-            Quit command to exit the program.
-        '''
         return True
 
     def do_EOF(self, args):
-        '''
-            Exits after receiving the EOF signal.
-        '''
         return True
 
     def do_create(self, args):
-        '''
-            Create a new instance of class BaseModel and saves it
-            to the JSON file.
-        '''
         if len(args) == 0:
             print("** class name missing **")
             return
@@ -47,28 +34,23 @@ class HBNBCommand(cmd.Cmd):
             new_instance = eval(args[0])()
             for i in args[1:]:
                 try:
-                    key = i.split("=")[0]
-                    value = i.split("=")[1]
-                    if hasattr(new_instance, key) is True:
+                    key, value = i.split("=")
+                    if hasattr(new_instance, key):
                         value = value.replace("_", " ")
                         try:
                             value = eval(value)
-                        except:
+                        except Exception:
                             pass
                         setattr(new_instance, key, value)
-                except (ValueError, IndexError):
+                except (ValueError, IndexError) as e:
                     pass
             new_instance.save()
             print(new_instance.id)
-        except:
+        except NameError:
             print("** class doesn't exist **")
             return
 
     def do_show(self, args):
-        '''
-            Print the string representation of an instance based on
-            the class name and id given as args.
-        '''
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -90,9 +72,6 @@ class HBNBCommand(cmd.Cmd):
             print("** no instance found **")
 
     def do_destroy(self, args):
-        '''
-            Deletes an instance based on the class name and id.
-        '''
         args = shlex.split(args)
         if len(args) == 0:
             print("** class name missing **")
@@ -117,10 +96,6 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_all(self, args):
-        '''
-            Prints all string representation of all instances
-            based or not on the class name.
-        '''
         args = args.split(" ")
         obj_list = []
         objects = storage.all(args[0])
@@ -133,15 +108,11 @@ class HBNBCommand(cmd.Cmd):
         try:
             for key, val in objects.items():
                 obj_list.append(val)
-        except:
+        except Exception:
             pass
         print(obj_list)
 
     def do_update(self, args):
-        '''
-            Update an instance based on the class name and id
-            sent as args.
-        '''
         storage.reload()
         args = shlex.split(args)
         if len(args) == 0:
@@ -154,74 +125,4 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
             return
         elif len(args) == 3:
-            print("** value missing **")
-            return
-        try:
-            eval(args[0])
-        except NameError:
-            print("** class doesn't exist **")
-            return
-        key = args[0] + "." + args[1]
-        obj_dict = storage.all()
-        try:
-            obj_value = obj_dict[key]
-        except KeyError:
-            print("** no instance found **")
-            return
-        try:
-            attr_type = type(getattr(obj_value, args[2]))
-            args[3] = attr_type(args[3])
-        except AttributeError:
-            pass
-        setattr(obj_value, args[2], args[3])
-        obj_value.save()
-
-    def emptyline(self):
-        '''
-            Prevents printing anything when an empty line is passed.
-        '''
-        pass
-
-    def do_count(self, args):
-        '''
-            Counts/retrieves the number of instances.
-        '''
-        obj_list = []
-        storage.reload()
-        objects = storage.all()
-        try:
-            if len(args) != 0:
-                eval(args)
-        except NameError:
-            print("** class doesn't exist **")
-            return
-        for key, val in objects.items():
-            if len(args) != 0:
-                if type(val) is eval(args):
-                    obj_list.append(val)
-            else:
-                obj_list.append(val)
-        print(len(obj_list))
-
-    def default(self, args):
-        '''
-            Catches all the function names that are not explicitly defined.
-        '''
-        functions = {"all": self.do_all, "update": self.do_update,
-                     "show": self.do_show, "count": self.do_count,
-                     "destroy": self.do_destroy, "update": self.do_update}
-        args = (args.replace("(", ".").replace(")", ".")
-                .replace('"', "").replace(",", "").split("."))
-
-        try:
-            cmd_arg = args[0] + " " + args[2]
-            func = functions[args[1]]
-            func(cmd_arg)
-        except:
-            print("*** Unknown syntax:", args[0])
-
-if __name__ == "__main__":
-    '''
-        Entry point for the loop.
-    '''
-    HBNBCommand().cmdloop()
+            print("** attribute value missing **")

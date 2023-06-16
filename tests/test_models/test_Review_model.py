@@ -24,9 +24,9 @@ class TestReview(unittest.TestCase):
             Sets up unittest
         '''
         cls.rev = Review()
-        cls.rev.user_id = "Darien and Melissa 123"
+        cls.rev.user_id = "Adrian and Melissa 123"
         cls.rev.place_id = "Amy and Victor's room at SF"
-        cls.rev.text = "Team Awesome includes Adequate"
+        cls.rev.text = "Team Awesome includes Adele"
 
     @classmethod
     def tearDownClass(cls):
@@ -47,7 +47,7 @@ class TestReview(unittest.TestCase):
         p = style.check_files(['models/review.py'])
         self.assertEqual(p.total_errors, 0, "pep8 error needs fixing")
 
-    def test_Review_dbtable(self):
+    def test_Review_db_table(self):
         '''
             Check if the tablename is correct
         '''

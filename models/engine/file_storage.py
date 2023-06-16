@@ -32,7 +32,7 @@ class FileStorage:
     def new(self, obj):
         '''
             Set in __objects the obj with key <obj class name>.id
-            Arguments:
+            Augments:
                 obj : An instance object.
         '''
         key = str(obj.__class__.__name__) + "." + str(obj.id)
