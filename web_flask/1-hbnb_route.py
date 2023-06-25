@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """Starts Flask web app
 Routes:
     / - display "Hello HBNB!"
